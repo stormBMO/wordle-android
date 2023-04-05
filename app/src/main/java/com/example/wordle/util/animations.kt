@@ -49,7 +49,7 @@ fun shakeAnimation(layout: LinearLayout): () -> Unit {
     }
 }
 
-fun flipTextView(
+fun flipEditText(
     editText: EditText,
     colorTextView: Int,
     dur: Long = 80L,
@@ -59,15 +59,15 @@ fun flipTextView(
     val flip90degrees = ObjectAnimator.ofFloat(editText, "rotationX", 0f, 90f).apply {
         duration = dur
         doOnEnd {
-            editText.setTextColor(editText.resources.getColor(R.color.white))
+            editText.setTextColor(ContextCompat.getColor(editText.context, R.color.white))
         }
     }
 
-    val textViewBackgroundColorAnimation =
+    val editTextBackgroundColorAnimation =
         if (reset) ObjectAnimator.ofArgb(
             editText,
             "backgroundColor",
-            editText.resources.getColor(R.color.white)
+            ContextCompat.getColor(editText.context, R.color.white)
         ).apply {
             duration = dur
             doOnEnd {
@@ -84,9 +84,8 @@ fun flipTextView(
 
     return AnimatorSet().apply {
         interpolator = AccelerateDecelerateInterpolator()
-
-        play(flip90degrees).before(textViewBackgroundColorAnimation)
-        play(textViewBackgroundColorAnimation).before(flip90degreesBack)
+        play(flip90degrees).before(editTextBackgroundColorAnimation)
+        play(editTextBackgroundColorAnimation).before(flip90degreesBack)
         play(flip90degreesBack)
 
     }
@@ -99,8 +98,7 @@ fun flipListOfTextViews(
     doOnEnd: () -> Unit
 ): AnimatorSet {
     val animations = editTexts.mapIndexed { index, editText ->
-
-        flipTextView(
+        flipEditText(
             editText,
             ContextCompat.getColor(editText.context, letters[index].backgroundColor),
             reset = reset
@@ -117,7 +115,6 @@ fun winAnimator(textViews: List<EditText>, doOnEnd: () -> Unit): AnimatorSet {
     return AnimatorSet().apply {
         playSequentially(
             textViews.mapIndexed { _, tw ->
-                //tw.bringToFront()
                 slightlyScaleUpAnimation(tw, dur)
             }
         )
@@ -132,7 +129,7 @@ fun showInfo(tw:TextView, message: String) {
     val alpha = ObjectAnimator.ofFloat(tw, "alpha", 0f, 1f, 1f, 1f, 1f, 1f, 0f).apply {
         duration = 2000L
     }
-    alpha.start();
+    alpha.start()
 }
 
 
