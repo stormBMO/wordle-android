@@ -29,7 +29,13 @@ class WordleFragment : Fragment() {
     private lateinit var context: Context
 
     private val viewModel: WordleViewModel by viewModels {
-        WordleViewModelFactory(context)
+        WordleViewModelFactory(
+            listOf(context.getString(R.string.allowed_letters),
+                context.getString(R.string.wining),
+                context.getString(R.string.alerts)
+            ),
+            context.resources.openRawResource(R.raw.words_wordle)
+        )
     }
 
     override fun onCreateView(
@@ -111,23 +117,23 @@ class WordleFragment : Fragment() {
                     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                     override fun afterTextChanged(s: Editable?) {
                         if(viewModel.allowedLetters.indexOf(s.toString()) < 0){
-                            shakeAnimation();
-                            editText.setText("");
+                            shakeAnimation()
+                            editText.setText("")
                             showInfo(binding.info, viewModel.alerts[2])
-                            return;
+                            return
                         }
                         if (s?.length == 0 && col > 0) {
                             lifecycleScope.launch {
-                                viewModel.deleteLetter(col);
+                                viewModel.deleteLetter(col)
                             }
-                            return;
+                            return
                         }
                         if (s?.length == 1 && col < list.lastIndex) {
                             editText.clearFocus()
                             list[col + 1].requestFocus()
                         }
                         lifecycleScope.launch {
-                            viewModel.setLetter(col, s.toString());
+                            viewModel.setLetter(col, s.toString())
                         }
                     }
                 })
@@ -167,11 +173,11 @@ class WordleFragment : Fragment() {
         fun finishGameAndReset() {
             viewModel.emitColor()
             viewModel.resetGame()
-            listOfTextViews[0][0].requestFocus();
+            listOfTextViews[0][0].requestFocus()
             shakeAnimation =
                 shakeAnimation(lettersRow[viewModel.currentPosition.row])
-            listOfTextViews.forEachIndexed { row, list ->
-                list.forEachIndexed { col, editText ->
+            listOfTextViews.forEachIndexed { _, list ->
+                list.forEachIndexed { _, editText ->
                     editText.setText("")
                 }
             }
@@ -200,7 +206,7 @@ class WordleFragment : Fragment() {
                             }
                             shakeAnimation =
                                     shakeAnimation(lettersRow[viewModel.currentPosition.row])
-                            listOfTextViews[viewModel.currentPosition.row][0].requestFocus();
+                            listOfTextViews[viewModel.currentPosition.row][0].requestFocus()
                         }
                     }
                     Signal.GAMEOVER -> {

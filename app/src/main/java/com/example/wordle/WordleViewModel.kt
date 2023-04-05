@@ -2,10 +2,10 @@ package com.example.wordle
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.wordle.data.Letter
 import com.example.wordle.data.Position
+import com.example.wordle.util.Signal
 import com.example.wordle.util.listToWord
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,15 +13,19 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import com.example.wordle.util.isWordInWordlist
+import java.io.InputStream
 import java.util.*
 
 const val WORD_LENGTH = 5
 const val NUMBER_OF_ROWS = 6
 val DEFAULT_LETTER = Letter("", R.drawable.border, R.color.black)
 
-class WordleViewModel(private val context: Context) : ViewModel() {
+class WordleViewModel(
+    stringResources: List<String>,
+    private val rawResources: InputStream
+    ) : ViewModel() {
     private var wordleWords: List<String>
-    var wordle: String;
+    var wordle: String
     val wining: List<String>
     val alerts: List<String>
     val allowedLetters: String
@@ -36,13 +40,13 @@ class WordleViewModel(private val context: Context) : ViewModel() {
     init {
         wordleWords = loadWordleWords()
         wordle = wordleWords.random()
-        allowedLetters = context.getString(R.string.allowed_letters)
-        wining = context.getString(R.string.wining).split(",")
-        alerts = context.getString(R.string.alerts).split(",")
+        allowedLetters = stringResources[0]
+        wining = stringResources[1].split(",")
+        alerts = stringResources[2].split(",")
     }
 
     private fun loadWordleWords(): List<String> {
-        val inputStream = context.resources.openRawResource(R.raw.words_wordle)
+        val inputStream = rawResources
         val reader = BufferedReader(InputStreamReader(inputStream))
         val listOfWords = mutableListOf<String>()
         var mLine = reader.readLine()
@@ -81,7 +85,7 @@ class WordleViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch {
             listOfEditTextValues.forEach { list ->
                 list.forEach { editTextValue ->
-                    editTextValue.emit(DEFAULT_LETTER);
+                    editTextValue.emit(DEFAULT_LETTER)
                 }
             }
         }
@@ -96,7 +100,7 @@ class WordleViewModel(private val context: Context) : ViewModel() {
                 Locale.getDefault()
             )
 
-        Log.i("GUESS",guess);
+        Log.i("GUESS",guess)
         when {
             guess.length < 5 -> {
                 signal.emit(Signal.NEEDLETTER)

@@ -1,6 +1,4 @@
-package com.example.wordle
-
-
+package com.example.wordle.util
 enum class Signal {
     NOTAWORD,
     NEEDLETTER,

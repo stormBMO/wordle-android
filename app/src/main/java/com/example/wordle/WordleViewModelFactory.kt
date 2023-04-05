@@ -1,12 +1,15 @@
 package com.example.wordle
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import java.io.InputStream
 
-class WordleViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class WordleViewModelFactory(
+    private val stringResources: List<String>,
+    private val rawResources: InputStream
+    ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(WordleViewModel::class.java)) {
-            return WordleViewModel(context) as T
+            return WordleViewModel(stringResources, rawResources) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
