@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Wordle</string>
+    <string name="next">NEXT</string>
+    <string name="wordle">Wordle</string>
+    <string name="allowed_letters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="rules">Rules</string>
+    <string name="wining">unreal,breathtaking,fabulous,awesome,good,barely</string>
+    <string name="alerts">Not in wordlist,Not enough letters,Change keyboard layout</string>
+</resources>

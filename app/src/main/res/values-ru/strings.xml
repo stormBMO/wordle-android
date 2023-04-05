@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Wordle</string>
+    <string name="next">Следующий</string>
+    <string name="wordle">Вордли</string>
+    <string name="allowed_letters">АБВГДЕЁЖЗИЙКЛАМНОПРСТУФХЦЧШЩЪЫБЭЮЯ</string>
+    <string name="rules">Правила</string>
+    <string name="wining">нереально,захватывающе,паразительно,потрясающе,хорошо,еле-еле</string>
+    <string name="alerts">Слова нет в списке,Недостаточно букв,Поменяйте раскладку клавиатуры</string>
+</resources>
